@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bhu-Abhilekh AI — Digitising Legacy Land Records</title>
+
+<style>
+  :root{
+    --navy:#132a45;
+    --navy-2:#1c3a5e;
+    --orange:#e8622c;
+    --orange-light:#fce8de;
+    --green:#227a4b;
+    --green-light:#e2f3e8;
+    --blue:#2f6fb3;
+    --blue-light:#e7f0fb;
+    --purple:#6b4fa0;
+    --purple-light:#f0eaf9;
+    --ink:#1a2433;
+    --muted:#5c6b7a;
+    --bg:#f7f8fa;
+    --card:#ffffff;
+    --border:#e6e9ee;
+    --radius:14px;
+    --shadow:0 4px 18px rgba(19,42,69,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  img{max-width:100%;}
+  a{color:inherit;}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3,h4{margin:0 0 8px;font-family:'Georgia','Times New Roman',serif;color:var(--navy);}
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--orange);
+    margin-bottom:10px;
+  }
+  .section{padding:76px 0;}
+  .section-alt{background:#fff;}
+  .section-head{max-width:680px;margin:0 auto 44px;text-align:center;}
+  .section-head h2{font-size:34px;}
+  .section-head p{color:var(--muted);font-size:16px;margin:0;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 24px;border-radius:999px;border:none;
+    font-size:15px;font-weight:600;cursor:pointer;
+    text-decoration:none;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 6px 16px rgba(232,98,44,0.35);}
+  .btn-ghost{background:rgba(255,255,255,0.12);color:#fff;border:1.5px solid rgba(255,255,255,0.5);}
+  .btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
+
+  /* NAV */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(19,42,69,0.96);
+    backdrop-filter:blur(6px);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    color:#fff;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--orange),var(--green));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:Georgia,serif;font-weight:800;font-size:16px;
+    flex:none;
+  }
+  .brand small{display:block;font-weight:400;font-size:11px;color:#b9c6d6;}
+  nav.links{display:flex;gap:26px;font-size:14.5px;}
+  nav.links a{opacity:0.85;text-decoration:none;}
+  nav.links a:hover{opacity:1;}
+  .nav-cta{display:flex;align-items:center;gap:14px;}
+  .hamburger{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;}
+  .mobile-menu{display:none;flex-direction:column;background:var(--navy-2);padding:10px 24px 18px;gap:12px;}
+  .mobile-menu.open{display:flex;}
+  @media (max-width:860px){
+    nav.links{display:none;}
+    .hamburger{display:block;}
+  }
+
+  /* HERO */
+  .hero{
+    background:radial-gradient(1200px 500px at 15% -10%, #234a70 0%, transparent 60%),
+               linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 65%, #1f3d61 100%);
+    color:#fff;padding:86px 0 70px;position:relative;overflow:hidden;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:48px;align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+  .hero-tag{
+    display:inline-block;background:rgba(232,98,44,0.18);color:#ffb98f;
+    border:1px solid rgba(232,98,44,0.4);
+    padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .hero h1{color:#fff;font-size:46px;line-height:1.12;margin-bottom:16px;}
+  .hero h1 span{color:var(--orange);}
+  .hero p.lead{color:#cfdaea;font-size:17px;max-width:520px;margin-bottom:28px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px;}
+  .hero-stats{display:flex;gap:28px;flex-wrap:wrap;}
+  .hero-stat b{display:block;font-size:24px;color:#fff;font-family:Georgia,serif;}
+  .hero-stat span{font-size:12.5px;color:#9fb0c4;}
+
+  .hero-visual{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:20px;padding:20px;backdrop-filter:blur(4px);
+  }
+  .flow-card{
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:12px;padding:14px 16px;
+    display:flex;align-items:center;gap:12px;margin-bottom:10px;
+    font-size:14px;
+  }
+  .flow-card .num{
+    width:26px;height:26px;border-radius:50%;background:var(--orange);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none;
+  }
+  .flow-arrow{text-align:center;color:#7d93ab;font-size:13px;margin:2px 0;}
+
+  /* PROBLEM / SOLUTION cards */
+  .cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media (max-width:860px){.cards-3{grid-template-columns:1fr;}}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:26px;box-shadow:var(--shadow);
+  }
+  .icon-badge{
+    width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    margin-bottom:14px;
+  }
+  .card h4{font-size:17px;margin-bottom:6px;}
+  .card p{color:var(--muted);font-size:14.5px;margin:0;}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media (max-width:860px){.split{grid-template-columns:1fr;}}
+  .panel{border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .panel-problem{background:var(--orange-light);border:1px solid #f5c9ae;}
+  .panel-solution{background:var(--blue-light);border:1px solid #bcd6f2;}
+  .panel-list{list-style:none;margin:16px 0 0;padding:0;}
+  .panel-list li{
+    display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,0.08);font-size:14.5px;color:var(--ink);
+  }
+  .panel-list li:last-child{border-bottom:none;}
+  .dot{width:8px;height:8px;border-radius:50%;margin-top:7px;flex:none;}
+
+  /* PIPELINE */
+  .pipeline{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;}
+  .pipe-step{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    min-width:170px;padding:20px 16px;text-align:left;box-shadow:var(--shadow);position:relative;
+  }
+  .pipe-step .step-num{
+    width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:13px;margin-bottom:12px;
+  }
+  .pipe-step h4{font-size:15px;margin-bottom:4px;}
+  .pipe-step p{font-size:12.5px;color:var(--muted);margin:0;}
+  .pipe-connector{align-self:center;color:var(--border);font-size:20px;padding:0 2px;flex:none;}
+
+  .stack-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px;}
+  @media (max-width:860px){.stack-grid{grid-template-columns:1fr;}}
+  .stack-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .stack-head{padding:16px 20px;color:#fff;font-weight:700;font-size:15px;}
+  .stack-row{display:flex;justify-content:space-between;padding:12px 20px;font-size:14px;border-top:1px solid var(--border);}
+  .stack-row b{color:var(--navy);font-weight:600;}
+  .stack-row span{color:var(--muted);text-align:right;}
+
+  /* DEMO */
+  .demo-shell{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .demo-toolbar{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:10px;}
+  .demo-toolbar .lights{display:flex;gap:6px;}
+  .demo-toolbar .lights span{width:10px;height:10px;border-radius:50%;background:#3b5a7d;}
+  .demo-toolbar .title{margin-left:8px;font-size:13px;color:#c9d6e6;}
+  .demo-body{padding:26px;}
+  .search-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .search-input{
+    flex:1;min-width:220px;padding:13px 16px;border-radius:10px;border:1.5px solid var(--border);
+    font-size:14.5px;outline:none;
+  }
+  .search-input:focus{border-color:var(--orange);}
+  .search-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:10px;padding:13px 20px;
+    font-weight:600;cursor:pointer;font-size:14.5px;
+  }
+  .lang-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+  .lang-pill{
+    padding:6px 13px;border-radius:999px;border:1px solid var(--border);font-size:12.5px;
+    background:#fff;cursor:pointer;color:var(--muted);
+  }
+  .lang-pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .demo-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;}
+  @media (max-width:900px){.demo-grid{grid-template-columns:1fr;}}
+  .result-item{
+    border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .result-item:hover{border-color:var(--orange);}
+  .result-item.active{border-color:var(--orange);background:var(--orange-light);}
+  .result-item .name{font-weight:700;font-size:14.5px;color:var(--navy);}
+  .result-item .meta{font-size:12.5px;color:var(--muted);margin-top:2px;}
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+    padding:3px 9px;border-radius:999px;margin-top:6px;
+  }
+  .badge-verified{background:var(--green-light);color:var(--green);}
+  .badge-review{background:#fff4de;color:#9c6b0b;}
+  .no-results{color:var(--muted);font-size:14px;padding:20px 0;}
+
+  .record-card{border:1.5px solid var(--border);border-radius:14px;padding:20px;background:#fafbfc;}
+  .record-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+  .record-head h4{margin:0;font-size:17px;}
+  .record-sub{color:var(--muted);font-size:13px;}
+  .scan-box{
+    background:repeating-linear-gradient(0deg,#efe6d2,#efe6d2 22px,#e7dcc4 22px,#e7dcc4 24px);
+    border:1px solid #d8caa9;border-radius:10px;height:150px;
+    display:flex;align-items:center;justify-content:center;color:#8a7a52;font-size:13px;font-style:italic;
+    margin-bottom:14px;
+  }
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .field{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 12px;}
+  .field label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .field div{font-size:14px;color:var(--ink);font-weight:600;margin-top:2px;}
+  .map-box{
+    height:110px;border-radius:10px;border:1px solid var(--border);
+    background:
+      linear-gradient(0deg, rgba(34,122,75,0.08) 1px, transparent 1px) 0 0/20px 20px,
+      linear-gradient(90deg, rgba(34,122,75,0.08) 1px, transparent 1px) 0 0/20px 20px,
+      var(--green-light);
+    position:relative;margin-bottom:16px;overflow:hidden;
+  }
+  .map-pin{
+    position:absolute;width:26px;height:26px;border-radius:50% 50% 50% 0;
+    background:var(--orange);transform:rotate(-45deg);
+    box-shadow:0 3px 8px rgba(0,0,0,0.25);
+  }
+  .demo-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .demo-note{
+    margin-top:16px;font-size:12.5px;color:var(--muted);background:#fff;border:1px dashed var(--border);
+    border-radius:10px;padding:10px 14px;
+  }
+
+  /* JOURNEY */
+  .journey{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:860px){.journey{grid-template-columns:1fr;}}
+  .journey-col{border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
+  .journey-today{background:#fff3ee;border:1px solid #f6cbb4;}
+  .journey-new{background:var(--green-light);border:1px solid #b9e0c7;}
+  .journey-steps{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+  .journey-step{
+    background:rgba(255,255,255,0.7);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .journey-arrow{align-self:center;color:var(--muted);}
+
+  /* IMPACT STATS */
+  .stats-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  @media (max-width:900px){.stats-4{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{
+    border-radius:var(--radius);padding:22px;text-align:left;box-shadow:var(--shadow);
+  }
+  .stat-card b{display:block;font-size:28px;font-family:Georgia,serif;margin-bottom:4px;}
+  .stat-card span{font-size:13px;color:var(--muted);}
+
+  /* ROADMAP */
+  .roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media (max-width:860px){.roadmap{grid-template-columns:1fr;}}
+  .phase-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
+  .phase-tag{
+    display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    padding:4px 11px;border-radius:999px;margin-bottom:12px;
+  }
+
+  footer{background:var(--navy);color:#c9d6e6;padding:44px 0 28px;font-size:13.5px;}
+  .footer-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:24px;}
+  .footer-cols{display:flex;gap:60px;flex-wrap:wrap;}
+  .footer-cols h5{color:#fff;font-size:13px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px;}
+  .footer-cols a{display:block;color:#9fb0c4;text-decoration:none;margin-bottom:7px;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:18px;color:#7d93ab;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.25.6/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
+
+/* ---------------- Icon helpers (inline SVG, no external icon font) ---------------- */
+const Icon = ({ path, size = 22, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    {path}
+  </svg>
+);
+const paths = {
+  doc: <><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></>,
+  globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18z"/></>,
+  clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></>,
+  scan: <><path d="M4 8V5a1 1 0 011-1h3M4 16v3a1 1 0 001 1h3M20 8V5a1 1 0 00-1-1h-3M20 16v3a1 1 0 01-1 1h-3"/><path d="M4 12h16"/></>,
+  read: <><path d="M4 5h7v16H4zM13 5h7v16h-7z"/><path d="M6 9h3M6 12h3M15 9h3M15 12h3"/></>,
+  verify: <><path d="M12 2l8 3v6c0 5-3.4 8.5-8 11-4.6-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></>,
+  search: <><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></>,
+  map: <><path d="M9 3L3 6v15l6-3 6 3 6-3V3l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/></>,
+  lock: <><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></>,
+  cloud: <><path d="M7 18a4 4 0 01-1-7.9A5 5 0 0116 9a4.5 4.5 0 01-1 9H7z"/></>,
+  cube: <><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></>,
+  users: <><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="18" cy="9" r="2.6"/><path d="M15.5 14.3c2.7.4 4.5 2.4 4.5 5.7"/></>,
+  bank: <><path d="M3 10l9-6 9 6"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9M3 19h18"/></>,
+  trend: <><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></>,
+  check: <path d="M20 6L9 17l-5-5"/>,
+  download: <><path d="M12 3v13m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></>,
+  pin: <><path d="M12 22s7-7.2 7-12.5A7 7 0 105 9.5C5 14.8 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.4"/></>,
+  bulb: <><path d="M9 18h6M10 21h4"/><path d="M12 2a6 6 0 00-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0012 2z"/></>,
+};
+
+/* ---------------- Mock "digitised record" data ---------------- */
+const RECORDS = [
+  {
+    id: "R-2291",
+    name: "Ramesh Chandra Yadav",
+    village: "Bhagwanpur, Muzaffarpur",
+    khasra: "Khasra No. 214/2",
+    area: "1.24 acres",
+    lang: "Hindi (Devanagari)",
+    status: "verified",
+    pinX: "42%", pinY: "38%",
+  },
+  {
+    id: "R-1187",
+    name: "Lakshmi Narayan Reddy",
+    village: "Kondapur, Rangareddy",
+    khasra: "Survey No. 88/1A",
+    area: "0.86 acres",
+    lang: "Telugu",
+    status: "verified",
+    pinX: "60%", pinY: "55%",
+  },
+  {
+    id: "R-3340",
+    name: "Balwinder Singh Gill",
+    village: "Talwandi, Ludhiana",
+    khasra: "Khewat No. 45",
+    area: "3.10 acres",
+    lang: "Punjabi (Gurmukhi)",
+    status: "review",
+    pinX: "30%", pinY: "62%",
+  },
+  {
+    id: "R-4025",
+    name: "Sunita Devi Mahato",
+    village: "Rampur Tola, Ranchi",
+    khasra: "Plot No. 112",
+    area: "0.5 acres",
+    lang: "Hindi (Devanagari)",
+    status: "verified",
+    pinX: "70%", pinY: "30%",
+  },
+  {
+    id: "R-2810",
+    name: "Anantha Krishnan Pillai",
+    village: "Chengannur, Alappuzha",
+    khasra: "Re-survey No. 512/3",
+    area: "0.22 acres",
+    lang: "Malayalam",
+    status: "review",
+    pinX: "50%", pinY: "70%",
+  },
+];
+
+const LANGS = ["All", "Hindi", "Telugu", "Punjabi", "Malayalam"];
+
+/* ---------------- Nav ---------------- */
+function NavBar() {
+  const [open, setOpen] = useState(false);
+  const links = ["Problem", "Solution", "Demo", "Pipeline", "Impact", "Roadmap"];
+  return (
+    <header className="nav">
+      <div className="nav-inner">
+        <div className="brand">
+          <div className="brand-mark">भ</div>
+          <div>
+            Bhu-Abhilekh AI
+            <small>Smart India Hackathon 2026</small>
+          </div>
+        </div>
+        <nav className="links">
+          {links.map(l => <a key={l} href={"#" + l.toLowerCase()}>{l}</a>)}
+        </nav>
+        <div className="nav-cta">
+          <a href="#demo" className="btn btn-ghost" style={{padding:"9px 18px", fontSize:13}}>Try Live Demo</a>
+          <button className="hamburger" onClick={() => setOpen(!open)}>&#9776;</button>
+        </div>
+      </div>
+      <div className={"mobile-menu" + (open ? " open" : "")}>
+        {links.map(l => <a key={l} href={"#" + l.toLowerCase()} onClick={() => setOpen(false)}>{l}</a>)}
+      </div>
+    </header>
+  );
+}
+
+/* ---------------- Hero ---------------- */
+function Hero() {
+  return (
+    <section className="hero">
+      <div className="container hero-grid">
+        <div>
+          <span className="hero-tag">AI · OCR · GIS · Bhasha AI</span>
+          <h1>Turning <span>handwritten land registers</span> into searchable, verified digital records</h1>
+          <p className="lead">
+            An AI pipeline that scans, reads, and verifies decades-old handwritten land records across
+            20+ Indian scripts &mdash; then links every record to its plot on a map. What once took two weeks
+            now takes two minutes.
+          </p>
+          <div className="hero-actions">
+            <a href="#demo" className="btn btn-primary">Search a Record <Icon path={paths.search} size={16}/></a>
+            <a href="#pipeline" className="btn btn-ghost">See How It Works</a>
+          </div>
+          <div className="hero-stats">
+            <div className="hero-stat"><b>2 wks &rarr; 2 min</b><span>Time to retrieve a certified copy</span></div>
+            <div className="hero-stat"><b>95%+</b><span>Field-level accuracy after review</span></div>
+            <div className="hero-stat"><b>20+</b><span>Indian languages &amp; scripts</span></div>
+          </div>
+        </div>
+        <div className="hero-visual">
+          <div className="flow-card"><div className="num">1</div> Scan bundles of old भूमि अभिलेख registers</div>
+          <div className="flow-arrow">&#8595;</div>
+          <div className="flow-card"><div className="num">2</div> OCR + Handwriting Recognition (HTR)</div>
+          <div className="flow-arrow">&#8595;</div>
+          <div className="flow-card"><div className="num">3</div> Officer verifies flagged fields</div>
+          <div className="flow-arrow">&#8595;</div>
+          <div className="flow-card"><div className="num">4</div> Citizen searches &amp; downloads in minutes</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Problem / Solution ---------------- */
+function ProblemSolution() {
+  return (
+    <section className="section section-alt" id="problem">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Idea Title</div>
+          <h2>AI-Powered Digitisation of Legacy Land Records</h2>
+          <p>AI converts old handwritten land records into searchable, verified, GIS-linked digital records.</p>
+        </div>
+        <div className="split">
+          <div className="panel panel-problem">
+            <h3 style={{color:"#a8461f"}}>The Problem</h3>
+            <ul className="panel-list">
+              <li><span className="dot" style={{background:"#c94f21"}}></span>Old records are handwritten and hard to read.</li>
+              <li><span className="dot" style={{background:"#c94f21"}}></span>20+ Indian scripts make digitisation difficult.</li>
+              <li><span className="dot" style={{background:"#c94f21"}}></span>Citizens may wait weeks for land records.</li>
+            </ul>
+          </div>
+          <div className="panel panel-solution">
+            <h3 style={{color:"#1f5490"}}>Our Solution</h3>
+            <div style={{display:"flex", gap:8, flexWrap:"wrap", marginTop:16}}>
+              {["Scan","Read","Verify","Search","Map"].map((s,i) => (
+                <React.Fragment key={s}>
+                  <span style={{background:"#fff", border:"1px solid #bcd6f2", padding:"8px 14px", borderRadius:999, fontSize:13, fontWeight:700, color:"var(--navy)"}}>{s}</span>
+                  {i < 4 && <span style={{alignSelf:"center", color:"#7fa8d6"}}>&rarr;</span>}
+                </React.Fragment>
+              ))}
+            </div>
+            <p style={{marginTop:18, fontSize:14.5, color:"#345"}}>Find records in seconds and link them to the correct plot &mdash; verified, and traceable end to end.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Live Demo ---------------- */
+function LiveDemo() {
+  const [query, setQuery] = useState("");
+  const [lang, setLang] = useState("All");
+  const [selected, setSelected] = useState(RECORDS[0]);
+
+  const results = useMemo(() => {
+    return RECORDS.filter(r => {
+      const matchesLang = lang === "All" || r.lang.startsWith(lang);
+      const q = query.trim().toLowerCase();
+      const matchesQuery = !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.village.toLowerCase().includes(q) ||
+        r.khasra.toLowerCase().includes(q) ||
+        r.id.toLowerCase().includes(q);
+      return matchesLang && matchesQuery;
+    });
+  }, [query, lang]);
+
+  return (
+    <section className="section" id="demo">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Interactive Prototype</div>
+          <h2>Search a Digitised Land Record</h2>
+          <p>Mock dataset for demo purposes &mdash; search by name, village, or khasra/survey number, exactly like the citizen-facing portal.</p>
+        </div>
+
+        <div className="demo-shell">
+          <div className="demo-toolbar">
+            <div className="lights"><span></span><span></span><span></span></div>
+            <span className="title">bhu-abhilekh.gov.in/search</span>
+          </div>
+          <div className="demo-body">
+            <div className="search-row">
+              <input
+                className="search-input"
+                placeholder="Search by name, village, or khasra number… e.g. Ramesh or Ludhiana"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+              />
+              <button className="search-btn" onClick={() => {}}>
+                <Icon path={paths.search} size={15}/> Search
+              </button>
+            </div>
+            <div className="lang-pills">
+              {LANGS.map(l => (
+                <span key={l} className={"lang-pill" + (lang === l ? " active" : "")} onClick={() => setLang(l)}>{l}</span>
+              ))}
+            </div>
+
+            <div className="demo-grid">
+              <div>
+                {results.length === 0 && <div className="no-results">No records match your search. Try a different name or village.</div>}
+                {results.map(r => (
+                  <div
+                    key={r.id}
+                    className={"result-item" + (selected && selected.id === r.id ? " active" : "")}
+                    onClick={() => setSelected(r)}
+                  >
+                    <div className="name">{r.name}</div>
+                    <div className="meta">{r.village} · {r.khasra}</div>
+                    <span className={"badge " + (r.status === "verified" ? "badge-verified" : "badge-review")}>
+                      <Icon path={r.status === "verified" ? paths.check : paths.clock} size={11}/>
+                      {r.status === "verified" ? "Verified Record" : "Pending Review"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div>
+                {selected ? (
+                  <div className="record-card">
+                    <div className="record-head">
+                      <div>
+                        <h4>{selected.name}</h4>
+                        <div className="record-sub">{selected.village} · {selected.lang}</div>
+                      </div>
+                      <span className={"badge " + (selected.status === "verified" ? "badge-verified" : "badge-review")}>
+                        <Icon path={selected.status === "verified" ? paths.check : paths.clock} size={11}/>
+                        {selected.status === "verified" ? "Verified" : "In Review"}
+                      </span>
+                    </div>
+
+                    <div className="scan-box">Scanned original register page (preserved as legal evidence)</div>
+
+                    <div className="field-grid">
+                      <div className="field"><label>Record ID</label><div>{selected.id}</div></div>
+                      <div className="field"><label>Khasra / Survey No.</label><div>{selected.khasra}</div></div>
+                      <div className="field"><label>Area</label><div>{selected.area}</div></div>
+                      <div className="field"><label>Script Detected</label><div>{selected.lang}</div></div>
+                    </div>
+
+                    <div className="map-box">
+                      <div className="map-pin" style={{left: selected.pinX, top: selected.pinY}}></div>
+                    </div>
+
+                    <div className="demo-actions">
+                      <button className="btn btn-primary" style={{padding:"10px 18px", fontSize:13.5}} onClick={() => alert("Demo only — in production this issues a signed, tamper-evident PDF of the verified record.")}>
+                        <Icon path={paths.download} size={15}/> Download Signed Copy
+                      </button>
+                      <button className="btn btn-outline" style={{padding:"10px 18px", fontSize:13.5}} onClick={() => alert("Demo only — opens the full GIS plot boundary view.")}>
+                        <Icon path={paths.map} size={15}/> View on GIS Map
+                      </button>
+                    </div>
+                  </div>
+                ) : <div className="no-results">Select a record to preview it.</div>}
+
+                <div className="demo-note">
+                  This is a front-end prototype with sample data for the SIH 2026 pitch. In production, results are
+                  served from the OCR + NER pipeline and PostGIS, with every field traceable to the original scan.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Pipeline ---------------- */
+const PIPELINE = [
+  { n: 1, title: "Scan & Upload", desc: "Bulk scans, PDFs, mobile capture", color: "#2f6fb3" },
+  { n: 2, title: "Pre-processing", desc: "Deskew, denoise, binarise · OpenCV", color: "#227a4b" },
+  { n: 3, title: "OCR + HTR", desc: "PaddleOCR, Tesseract, TrOCR", color: "#c94f21" },
+  { n: 4, title: "Layout & NER", desc: "LayoutLMv3, IndicBERT, LLM → JSON", color: "#6b4fa0" },
+  { n: 5, title: "Human Verify", desc: "Confidence flags, officer sign-off", color: "#227a4b" },
+  { n: 6, title: "Search & GIS", desc: "PostGIS plot link, Elasticsearch", color: "#2f6fb3" },
+];
+
+const CORE_STACK = [
+  ["OCR & HTR", "PaddleOCR, Tesseract, TrOCR"],
+  ["AI & NLP", "PyTorch, IndicBERT, IndicNER"],
+  ["Document AI", "LayoutLMv3, DocTR"],
+  ["Image Processing", "OpenCV, Pillow"],
+  ["Backend", "Python, FastAPI"],
+  ["Frontend", "React.js, Next.js"],
+  ["Database", "PostgreSQL, PostGIS"],
+  ["GIS", "GeoServer, OpenLayers"],
+];
+const PLATFORM_STACK = [
+  ["Search", "Elasticsearch, pgvector"],
+  ["Language AI", "BHASHINI, AI4Bharat"],
+  ["API & Integration", "REST API, JSON"],
+  ["Security", "Keycloak, OAuth 2.0, RBAC"],
+  ["Storage", "MinIO / S3"],
+  ["Deployment", "Docker, Kubernetes"],
+  ["Dashboard", "ECharts, React"],
+  ["Monitoring", "Prometheus, Grafana"],
+];
+
+function Pipeline() {
+  return (
+    <section className="section section-alt" id="pipeline">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Technical Approach</div>
+          <h2>Six Stages, Paper to Public Record</h2>
+          <p>Every stage runs on open-source tools; every publish is human-approved.</p>
+        </div>
+        <div className="pipeline">
+          {PIPELINE.map((p, i) => (
+            <React.Fragment key={p.n}>
+              <div className="pipe-step">
+                <div className="step-num" style={{background:p.color}}>{p.n}</div>
+                <h4>{p.title}</h4>
+                <p>{p.desc}</p>
+              </div>
+              {i < PIPELINE.length - 1 && <div className="pipe-connector">&rarr;</div>}
+            </React.Fragment>
+          ))}
+        </div>
+
+        <div className="stack-grid">
+          <div className="stack-card">
+            <div className="stack-head" style={{background:"var(--orange)"}}>Core Technology Stack</div>
+            {CORE_STACK.map(([k,v]) => (
+              <div className="stack-row" key={k}><b>{k}</b><span>{v}</span></div>
+            ))}
+          </div>
+          <div className="stack-card">
+            <div className="stack-head" style={{background:"var(--blue)"}}>Additional Platform Stack</div>
+            {PLATFORM_STACK.map(([k,v]) => (
+              <div className="stack-row" key={k}><b>{k}</b><span>{v}</span></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Citizen journey ---------------- */
+function Journey() {
+  return (
+    <section className="section">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Impact &amp; Benefits</div>
+          <h2>From Paper Registers to People&rsquo;s Empowerment</h2>
+          <p>Faster, fairer, and more transparent land records.</p>
+        </div>
+        <div className="journey">
+          <div className="journey-col journey-today">
+            <h3 style={{color:"#a8461f"}}>Today</h3>
+            <div className="journey-steps">
+              <span className="journey-step"><Icon path={paths.bank} size={15}/> Visit tehsil office</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step"><Icon path={paths.doc} size={15}/> Find the register</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step">₹ Pay a facilitator</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step"><Icon path={paths.clock} size={15}/> Wait weeks</span>
+            </div>
+          </div>
+          <div className="journey-col journey-new">
+            <h3 style={{color:"#1c6b3f"}}>With the Platform</h3>
+            <div className="journey-steps">
+              <span className="journey-step"><Icon path={paths.search} size={15}/> Search by name or plot</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step"><Icon path={paths.pin} size={15}/> See the scan &amp; map</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step"><Icon path={paths.download} size={15}/> Download signed copy</span>
+              <span className="journey-arrow">&rarr;</span>
+              <span className="journey-step"><Icon path={paths.check} size={15}/> All in minutes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Impact stats ---------------- */
+const STATS = [
+  { big: "2 wks → 2 min", label: "Time to retrieve a certified record copy", bg: "var(--orange-light)", color: "#a8461f" },
+  { big: "95%+", label: "Target field-level extraction accuracy after review", bg: "var(--green-light)", color: "#1c6b3f" },
+  { big: "20+", label: "Indian languages and scripts supported", bg: "var(--blue-light)", color: "#1f5490" },
+  { big: "~70%", label: "Reduction in manual data-entry effort", bg: "var(--purple-light)", color: "#5a3f8a" },
+];
+const IMPACTS = [
+  { icon: paths.users, title: "Social", color: "#c94f21", text: "Farmers and small landholders get proof of title without middlemen. Women's and tribal land claims become traceable in the record itself." },
+  { icon: paths.bank, title: "Administrative", color: "#2f6fb3", text: "Revenue offices move from register-hunting to verification. Every edit is audit-logged and versioned." },
+  { icon: paths.trend, title: "Economic", color: "#227a4b", text: "Faster loan collateral checks, cleaner land acquisition for infrastructure, and higher stamp-duty compliance." },
+];
+
+function Impact() {
+  return (
+    <section className="section section-alt" id="impact">
+      <div className="container">
+        <div className="stats-4">
+          {STATS.map(s => (
+            <div className="stat-card" key={s.label} style={{background:s.bg}}>
+              <b style={{color:s.color}}>{s.big}</b>
+              <span>{s.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="cards-3" style={{marginTop:26}}>
+          {IMPACTS.map(im => (
+            <div className="card" key={im.title}>
+              <div className="icon-badge" style={{background: im.color + "20"}}>
+                <Icon path={im.icon} size={22} color={im.color}/>
+              </div>
+              <h4>{im.title}</h4>
+              <p>{im.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Feasibility ---------------- */
+const FEASIBLE = [
+  { icon: paths.lock, title: "Fully open-source stack", text: "No license cost" },
+  { icon: paths.cloud, title: "Runs on existing NIC / State Data Centre", text: "Uses current infrastructure" },
+  { icon: paths.globe, title: "BHASHINI & AI4Bharat", text: "Cover Indic scripts" },
+  { icon: paths.cube, title: "Modular design", text: "Pilot one tehsil, scale by container" },
+];
+function Feasibility() {
+  return (
+    <section className="section">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Feasibility &amp; Viability</div>
+          <h2>Yes — We Can Build It</h2>
+          <p>Open-source tools, existing infrastructure, and a phased rollout.</p>
+        </div>
+        <div className="cards-3">
+          {FEASIBLE.map(f => (
+            <div className="card" key={f.title}>
+              <div className="icon-badge" style={{background:"var(--green-light)"}}>
+                <Icon path={f.icon} size={22} color="var(--green)"/>
+              </div>
+              <h4>{f.title}</h4>
+              <p>{f.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Roadmap ---------------- */
+const PHASES = [
+  { tag: "Phase I", tagBg: "var(--orange-light)", tagColor: "#a8461f", title: "Blockchain-anchored title", text: "Tamper-evident hash of every verified record — one source of truth for banks and courts." },
+  { tag: "Phase II", tagBg: "var(--green-light)", tagColor: "#1c6b3f", title: "Drone & satellite survey", text: "Match textual records to actual parcel boundaries and auto-flag encroachment." },
+  { tag: "Phase III", tagBg: "var(--blue-light)", tagColor: "#1f5490", title: "Voice & chat assistant", text: "Ask “मेरी जमीन का खसरा” in any Indian language via BHASHINI speech and get the record." },
+];
+function Roadmap() {
+  return (
+    <section className="section section-alt" id="roadmap">
+      <div className="container">
+        <div className="section-head">
+          <div className="eyebrow">Future Scope</div>
+          <h2>Where This Goes Next</h2>
+        </div>
+        <div className="roadmap">
+          {PHASES.map(p => (
+            <div className="phase-card" key={p.tag}>
+              <span className="phase-tag" style={{background:p.tagBg, color:p.tagColor}}>{p.tag}</span>
+              <h4>{p.title}</h4>
+              <p style={{color:"var(--muted)", fontSize:14.5}}>{p.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+function Footer() {
+  return (
+    <footer>
+      <div className="container">
+        <div className="footer-grid">
+          <div style={{maxWidth:320}}>
+            <div className="brand" style={{marginBottom:10}}>
+              <div className="brand-mark">भ</div>
+              <div style={{color:"#fff"}}>Bhu-Abhilekh AI</div>
+            </div>
+            <p>AI-powered digitisation of legacy land records — Smart India Hackathon 2026 prototype.</p>
+          </div>
+          <div className="footer-cols">
+            <div>
+              <h5>Product</h5>
+              <a href="#demo">Live Demo</a>
+              <a href="#pipeline">Pipeline</a>
+              <a href="#roadmap">Roadmap</a>
+            </div>
+            <div>
+              <h5>References</h5>
+              <a>DILRMP, Ministry of Rural Development</a>
+              <a>BHASHINI — National Language Translation Mission</a>
+              <a>AI4Bharat — IndicBERT, IndicNER, IndicOCR</a>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>Built for SIH 2026 · PS Category: Software</span>
+          <span>Same records. A better tomorrow.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  return (
+    <React.Fragment>
+      <NavBar/>
+      <Hero/>
+      <ProblemSolution/>
+      <LiveDemo/>
+      <Pipeline/>
+      <Journey/>
+      <Impact/>
+      <Feasibility/>
+      <Roadmap/>
+      <Footer/>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
