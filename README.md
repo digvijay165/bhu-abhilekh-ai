@@ -1,24 +1,33 @@
-# Bhu-Abhilekh AI
+# Terra Trust
 
-**AI-Powered Digitisation of Legacy Land Records** — a Smart India Hackathon 2026 prototype.
+**AI-Verified Land Records & Citizen Services** — a Smart India Hackathon 2026 prototype.
 
-AI converts old handwritten land records (across 20+ Indian scripts) into searchable,
-verified, GIS-linked digital records — cutting the time to retrieve a certified copy
-from two weeks to two minutes.
+A full citizen-services portal (in the style of state land-record portals) built on top
+of an AI pipeline that converts old handwritten land records — across 20+ Indian scripts —
+into searchable, verified, GIS-linked digital records. Cuts the time to retrieve a
+certified copy from two weeks to two minutes.
 
 ## What's in this repo
 
-A single-page React website (`index.html`) that demonstrates the product concept:
+A single-page React app (`index.html`) with six tab-based sections:
 
-- Hero section with the pitch and key stats
-- Problem / solution overview
-- **Interactive live demo** — search a mock dataset of digitised land records by name,
-  village, or khasra/survey number, with language filters and a record detail view
-  (scanned document placeholder, extracted fields, verification badge, GIS map pin)
-- Six-stage technical pipeline (Scan → Pre-processing → OCR+HTR → Layout & NER →
-  Human Verify → Search & GIS) with the full tech stack
-- Citizen journey (today vs. with the platform), impact stats, feasibility, and
-  a three-phase roadmap
+- **Home** — hero, a live cadastral parcel highlight card, an instant application
+  tracker, a services preview, a citizen knowledge hub, and a compliance disclaimer
+- **Services** — the full grid of citizen services (registration, mutation, records
+  search, title check, duty calculator, dispute & zoning)
+- **Land Records** — search a mock dataset of digitised records by name, village, or
+  khasra/survey number, with language filters, a scanned-document preview, extracted
+  fields, a GIS map pin, and linked documents
+- **Applications** — search and track mutation/registration dockets with a live
+  4-stage progress tracker, assigned authority, and dates
+- **Documents** — every document linked to a citizen's verified records, with
+  verification status
+- **Platform** — the AI pipeline (Scan → Pre-processing → OCR+HTR → Layout & NER →
+  Human Verify → Search & GIS), full tech stack, impact stats, and roadmap, for
+  hackathon reviewers
+
+Other touches: a working **EN/हिंदी language toggle**, a notifications dropdown, a
+profile menu, and a mobile app-style bottom nav with a "More" sheet.
 
 ## Tech
 
