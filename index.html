@@ -415,7 +415,7 @@ const T = {
 
 /* ================= Mock data ================= */
 const RECORDS = [
-  { id:"R-2291", appId:"BS-2025-8841", name:"Ramesh Chandra Yadav", village:"Bhagwanpur, Muzaffarpur", khasra:"Khasra No. 214/2", area:"1.24 Hectares", lang:"Hindi (Devanagari)", status:"verified", pinX:"42%", pinY:"38%", lat:"28.6139° N", lng:"77.209° E",
+  { id:"R-2291", appId:"BS-2025-8841", name:"Digvijay Singh", village:"Bhagwanpur, Muzaffarpur", khasra:"Khasra No. 214/2", area:"1.24 Hectares", lang:"Hindi (Devanagari)", status:"verified", pinX:"42%", pinY:"38%", lat:"28.6139° N", lng:"77.209° E",
     docs:[{name:"Sale Deed (Original Scan)",verified:true},{name:"RoR / Jamabandi Extract",verified:true},{name:"Mutation Certificate",verified:false}] },
   { id:"R-1187", appId:"BS-2025-7710", name:"Lakshmi Narayan Reddy", village:"Kondapur, Rangareddy", khasra:"Survey No. 88/1A", area:"0.86 Hectares", lang:"Telugu", status:"verified", pinX:"60%", pinY:"55%", lat:"17.4933° N", lng:"78.3915° E",
     docs:[{name:"Sale Deed (Original Scan)",verified:true},{name:"7/12 Extract",verified:true}] },
@@ -545,10 +545,10 @@ function Header({tab, setTab, lang, setLang, t}){
               )}
             </div>
             <div className="rel">
-              <div className="avatar" onClick={() => {setShowProfile(!showProfile); setShowNotif(false);}}>RY</div>
+              <div className="avatar" onClick={() => {setShowProfile(!showProfile); setShowNotif(false);}}>DS</div>
               {showProfile && (
                 <div className="dropdown fade-in">
-                  <div className="dropdown-head">Ramesh Chandra Yadav<br/><span style={{fontSize:11}}>Verified Citizen Account</span></div>
+                  <div className="dropdown-head">Digvijay Singh<br/><span style={{fontSize:11}}>Verified Citizen Account</span></div>
                   <div className="menu-item" onClick={() => {setTab("applications"); setShowProfile(false);}}><Icon path={P.briefcase} size={15}/> My Applications</div>
                   <div className="menu-item" onClick={() => {setTab("documents"); setShowProfile(false);}}><Icon path={P.folder} size={15}/> My Documents</div>
                   <div className="menu-item" onClick={() => alert("Demo only — signs out of the citizen account.")}><Icon path={P.x} size={15}/> Sign Out</div>
