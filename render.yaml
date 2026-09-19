@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: bhu-abhilekh-ai
+    name: terra-trust
     runtime: static
     buildCommand: ""
     staticPublishPath: .
